@@ -26,24 +26,15 @@ namespace WebAPI.Controllers
             return BadRequest(data);
         }
         [HttpPost("[action]")]
-        public async Task<IActionResult> Add(Rate rate)
+        public async Task<IActionResult> AddByPhoneNumber(string phoneNumber,decimal rate)
         {
-            var result = await _rateService.Add(rate);
+            var result = await _rateService.AddByPhoneNumber(phoneNumber,rate);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Update(Rate rate)
-        {
-            var result = await _rateService.Update(rate);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
+      
     }
 }

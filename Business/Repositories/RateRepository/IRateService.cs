@@ -11,7 +11,7 @@ namespace Business.Repositories.RateRepository
 {
     public interface IRateService
     {
-        Task<IResult> AddByPhoneNumer(string phoneNumber);
+        Task<IResult> AddByPhoneNumber(string phoneNumber,decimal rate);
         
         Task<IDataResult<List<Rate>>> GetList();
         Task<Rate> GetByPhoneNumber(string phoneNumber);

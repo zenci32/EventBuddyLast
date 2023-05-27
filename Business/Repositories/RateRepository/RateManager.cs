@@ -21,10 +21,25 @@ namespace Business.Repositories.RateRepository
 
         }
 
-        public async Task<IResult> Add(Rate rate)
+        public async Task<IResult> AddByPhoneNumber(string phoneNumber, decimal rateTotal)
         {
-            await _rateDal.Add(rate);
-            return new SuccessResult("Puan verildi", 200);
+            try
+            {
+
+                var newRate = new Rate
+                {
+                    Phone = phoneNumber,
+                    RateTotal = rateTotal,
+                };
+
+                await _rateDal.Add(newRate);
+
+                return new SuccessResult("Rate başarıyla eklendi.");
+            }
+            catch (Exception ex)
+            {
+                return new ErrorResult("Rate ekleme sırasında bir hata oluştu.");
+            }
         }
 
         public async Task<Rate> GetByPhoneNumber(string phoneNumber)
@@ -38,22 +53,6 @@ namespace Business.Repositories.RateRepository
             return new SuccessDataResult<List<Rate>>(rates);
         }
 
-
-        public async Task<IResult> Update(Rate rate)
-        {
-            try
-            {
-                // Rate nesnesini güncelleyin
-                await _rateDal.Update(rate);
-
-                return new SuccessResult("Puan güncellendi.");
-            }
-            catch (Exception ex)
-            {
-                // Hata durumunda gerekli işlemler yapılabilir
-                return new ErrorResult("Puan Güncelleme sırasında bir hata oldu");
-            }
-        }
 
     }
 }
