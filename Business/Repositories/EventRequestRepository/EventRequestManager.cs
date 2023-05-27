@@ -93,7 +93,7 @@ namespace Business.Repositories.EventRequestRepository
         public IResult GetAcceptOrReject(string invaterPhone, int eventId, bool status)
         {
             var eventt = _eventDal.Get(x => x.EventId == eventId).Result;
-            var eventRequest = _eventRequestDal.Get(x => x.InviterPhone == invaterPhone).Result;
+            var eventRequest = _eventRequestDal.Get(x => x.InviterPhone == invaterPhone && x.EventId == eventId).Result;
             if (status)
             {
                 if (eventt.ActiveCount < eventt.EventCount)
