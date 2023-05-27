@@ -109,8 +109,20 @@ namespace Business.Repositories.UserRepository
         [ValidationAspect(typeof(UserValidator))]
         public async Task<IResult> Update(User user)
         {
-            await _userDal.Update(user);
-            return new SuccessResult(UserMessages.UpdatedUser,200);
+            var existingUser = await _userDal.Get(u => u.Phone == user.Phone);
+
+            if (existingUser == null)
+            {
+                return new ErrorResult("Kullanıcı bulunamadı", 404);
+            }
+
+            existingUser.Name = user.Name;
+            existingUser.Email = user.Email;
+            existingUser.BirthDay = user.BirthDay;
+
+            await _userDal.Update(existingUser);
+
+            return new SuccessResult(UserMessages.UpdatedUser, 200);
         }
 
         public async Task<IResult> Delete(User user)
@@ -306,6 +318,11 @@ namespace Business.Repositories.UserRepository
             }
 
             return new SuccessResult(UserMessages.ConfirmUserMailSendSuccessiful,200);
+        }
+
+        public async Task<User> GetUserByPhoneNumber(string phoneNumber)
+        {
+            return await _userDal.Get(p => p.Phone == phoneNumber);
         }
     }
 }

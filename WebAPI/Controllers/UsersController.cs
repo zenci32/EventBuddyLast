@@ -65,15 +65,30 @@ namespace WebAPI.Controllers
 
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Update(User user)
+        public async Task<IActionResult> Update(string Email, string Name, string Phone, DateTime BirthDay)
         {
-            var result = await _userService.Update(user);
-            if (result.Success)
+           
+            var user = await _userService.GetUserByPhoneNumber(Phone); // Örnek bir yöntemle kullanıcıyı e-posta adresine göre alın
+            if (user != null)
             {
-                return Ok(result);
+                user.Name = Name;
+                user.Phone = Phone;
+                user.BirthDay = BirthDay;
+                user.Email = Email;
+
+                var result = await _userService.Update(user); // Kullanıcıyı güncellemek için ilgili hizmeti veya veri erişim katmanını kullanın
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+                return BadRequest(result.Message);
             }
-            return BadRequest(result.Message);
+            else
+            {
+                return NotFound("Kullanıcı bulunamadı."); // Eğer kullanıcı bulunamazsa uygun bir yanıt döndürün
+            }
         }
+
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Delete(User user)

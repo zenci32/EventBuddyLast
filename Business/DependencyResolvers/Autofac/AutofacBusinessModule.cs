@@ -7,6 +7,7 @@ using Business.Repositories.EmailRepository;
 using Business.Repositories.EventRepository;
 using Business.Repositories.EventRequestRepository;
 using Business.Repositories.OperationClaimRepository;
+using Business.Repositories.RateRepository;
 using Business.Repositories.UserOperationClaimRepository;
 using Business.Repositories.UserRepository;
 using Core.Utilities.Interceptors;
@@ -16,6 +17,7 @@ using DataAccess.Repositories.EmailRepository;
 using DataAccess.Repositories.EventRepository;
 using DataAccess.Repositories.EventRequestRepository;
 using DataAccess.Repositories.OperationClaimRepository;
+using DataAccess.Repositories.RateRepository;
 using DataAccess.Repositories.UserOperationClaimRepository;
 using DataAccess.Repositories.UserRepository;
 
@@ -30,6 +32,9 @@ namespace Business.DependencyResolvers.Autofac
 
             builder.RegisterType<UserManager>().As<IUserService>();
             builder.RegisterType<EfUserDal>().As<IUserDal>();
+
+            builder.RegisterType<RateManager>().As<IRateService>();
+            builder.RegisterType<EfRateDal>().As<IRateDal>();
 
             builder.RegisterType<UserOperationClaimManager>().As<IUserOperationClaimService>();
             builder.RegisterType<EfUserOperationClaimDal>().As<IUserOperationClaimDal>();

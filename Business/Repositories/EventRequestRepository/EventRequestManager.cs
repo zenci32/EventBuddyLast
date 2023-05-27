@@ -47,6 +47,14 @@ namespace Business.Repositories.EventRequestRepository
         public async Task<IResult> EventRequest(int eventId, string inviterPhone)
         {
             var eventt = _eventDal.Get(x => x.EventId == eventId).Result;
+            var existingRequest = await _eventRequestDal.Get(x => x.EventId == eventId && x.InviterPhone == inviterPhone);
+
+            if (existingRequest != null)
+            {
+                // Kullanıcı daha önce istekte bulunmuş
+                return new ErrorResult("Bu kullanıcı zaten bir istekte bulunmuştur.", 201);
+            }
+
             if (eventt.ActiveCount < eventt.EventCount)
             {
                 var eventRequest = new EventRequest { EventId = eventId, InviterPhone = inviterPhone, Status = "pending" };
@@ -56,9 +64,9 @@ namespace Business.Repositories.EventRequestRepository
             else
             {
                 return new ErrorResult("Bu event için kişi sayısı dolmuştur", 201);
-
             }
         }
+
 
         /// <summary>
         /// Event katılma isteği iptal

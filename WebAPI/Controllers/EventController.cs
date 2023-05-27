@@ -83,5 +83,12 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+
+        //[HttpPost("[action]")]
+        //public async Task<IActionResult>UpdateEventRequestStatus(int eventId, int status)
+        //{
+        //    var result 
+        //}
+
     }
 }

@@ -18,6 +18,7 @@ namespace Entities.Dtos
         public int EventCount { get; set; }
 
         public int ActiveCount { get; set; }
+        public decimal?  Rate { get; set; }
 
     }
 }

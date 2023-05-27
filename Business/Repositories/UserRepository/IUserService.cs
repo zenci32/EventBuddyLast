@@ -21,5 +21,6 @@ namespace Business.Repositories.UserRepository
         Task<IDataResult<User>> GetById(int id);
         Task<User> GetByIdForAuth(int id);
         Task<IDataResult<UserInfoDto>> GetUserInfo(string phone);
+        Task<User> GetUserByPhoneNumber(string phoneNumber);
     }
 }

@@ -24,5 +24,6 @@ namespace Entities.Concrete
         public DateTime EventCreateDate { get; set; }
         public DateTime EventLastUpdateDate { get; set; }
         public bool IsDeleted { get; set; }
+        public DateTime TimeStampt { get; set; }
     }
 }

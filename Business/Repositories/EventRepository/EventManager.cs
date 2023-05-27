@@ -9,6 +9,7 @@ using Entities.Concrete;
 using Entities.Dtos;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -46,7 +47,8 @@ namespace Business.Repositories.EventRepository
                 EventFinishDate = eventDto.EventFinishDate,
                 IsDeleted = false,
                 Phone = eventDto.Phone,
-                EventStatus = "active"
+                EventStatus = "active",
+                TimeStampt=DateTime.Now,
             };
             await _eventDal.Add(eventt);
             return new SuccessResult("Event başarıyla oluşturulmuştur", 200);
@@ -74,28 +76,38 @@ namespace Business.Repositories.EventRepository
         {
             var eventt = new List<Event>();
             var getAllEvent = await _eventDal.GetAll(x => x.IsDeleted == false);
-            var getRequestedEvent =  _eventRequestDal.GetAll(x => x.InviterPhone == phone).Result;
-
+            var getRequestedEvent = _eventRequestDal.GetAll(x => x.InviterPhone == phone).Result;
+            var currentDate = DateTime.Now;
             if (getRequestedEvent.Any())
             {
                 foreach (var item in getRequestedEvent)
                 {
                     getAllEvent.RemoveAll(x => x.EventId == item.EventId);
+
                 }
             }
+            if (getAllEvent.Any())
+            {
+                foreach (var eventchange in getAllEvent)
+                {
+                    eventchange.TimeStampt = currentDate;
+                    await _eventDal.Update(eventchange);
+                }
+            }
+            
             return new SuccessDataResult<List<Event>>(getAllEvent, "Eventler listelenmiştir", 200);
         }
 
         public async Task<IDataResult<EventDetailDto>> GetEventDetail(int eventId)
         {
             var eventDetail = new EventDetailDto();
-            var eventt =  _eventDal.Get(x => x.EventId == eventId).Result;
+            var eventt = _eventDal.Get(x => x.EventId == eventId).Result;
             var requestEventList = new List<RequestEventNotifyDto>();
 
             eventDetail.EventDetail = eventt;
 
 
-            var requestDetail =  _eventRequestDal.GetAll(x => x.EventId == eventt.EventId && x.Status == "active").Result;
+            var requestDetail = _eventRequestDal.GetAll(x => x.EventId == eventt.EventId && x.Status == "active").Result;
 
             foreach (var item in requestDetail)
             {
@@ -107,7 +119,11 @@ namespace Business.Repositories.EventRepository
                     InviterName = inveterUser.Name,
                     EventName = eventt.EventName,
                     EventCount = eventt.EventCount,
-                    ActiveCount = eventt.ActiveCount
+                    ActiveCount = eventt.ActiveCount,
+                    Rate=inveterUser.Rate,
+                    
+                    
+                   
                 };
                 requestEventList.Add(requestEventNotify);
             }
@@ -117,6 +133,8 @@ namespace Business.Repositories.EventRepository
 
             throw new NotImplementedException();
         }
+
+
 
         public async Task<IDataResult<List<Event>>> GetPersonalEvent(string phone)
         {
@@ -129,5 +147,12 @@ namespace Business.Repositories.EventRepository
             await _eventDal.Update(eventt);
             return new SuccessResult("Event başarıyla güncellenmiştir", 200);
         }
+
+       
+
+
+
+
     }
 }
+
