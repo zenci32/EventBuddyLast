@@ -43,26 +43,7 @@ namespace WebAPI.Controllers
                 PhoneNumber = PhoneNumber
             };
 
-            List<int> recipientUserIds = new List<int>();
-
-            var activeEventUsers = await _eventService.EventUsers
-                .Where(eu => eu.EventId == EventId && eu.EventStatus=="active")
-                .ToListAsync();
-            recipientUserIds.AddRange(activeEventUsers.Select(eu => eu.UserId));
-
-            
-            var activeEventRequestUsers = await _eventRequestService.EventRequestUsers
-                .Where(eru => eru.EventId == EventRequestId && eru.Status == "active")
-                .ToListAsync();
-            recipientUserIds.AddRange(activeEventRequestUsers.Select(eru => eru.UserId));
-
-            
-            foreach (var recipientUserId in recipientUserIds)
-            {
-              
-                await _hub.Clients.User(recipientUserId.ToString()).SendAsync("ReceiveMessage", messageModel);
-            }
-
+            await _hub.Clients.All.SendAsync("ReceiveMessage", messageModel);
             return Ok();
         }
 
