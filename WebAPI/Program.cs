@@ -5,6 +5,7 @@ using Core.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using WebAPI.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -53,5 +55,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.MapHub<ChatHub>("/chatHub");
 app.Run();
