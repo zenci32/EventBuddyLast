@@ -75,7 +75,7 @@ namespace Business.Repositories.EventRepository
         public async Task<IDataResult<List<Event>>> GetAllEvent(string phone)
         {
             var eventt = new List<Event>();
-            var getAllEvent = await _eventDal.GetAll(x => x.IsDeleted == false);
+            var getAllEvent = await _eventDal.GetAll(x => x.IsDeleted == false && x.EventStatus == "active" );
             var getRequestedEvent = _eventRequestDal.GetAll(x => x.InviterPhone == phone).Result;
             var currentDate = DateTime.Now;
             if (getRequestedEvent.Any())
