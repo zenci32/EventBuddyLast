@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Business.Repositories.EventRepository
 {
-    internal class EventManager : IEventService
+    public class EventManager : IEventService
     {
         private readonly IEventDal _eventDal;
         private readonly IEventRequestDal _eventRequestDal;

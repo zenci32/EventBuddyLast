@@ -5,10 +5,12 @@ namespace WebAPI.Hubs
 {
     public class ChatHub:Hub
     {
+
         public async Task SendMessage(string message,string phone)
         {
+            
 
-            MessageModel messageModel = new MessageModel
+            MessageModelDto messageModel = new MessageModelDto
             {
                 CreateDate = DateTime.Now,
                 MessageText = message,

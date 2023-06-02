@@ -3,6 +3,7 @@ using Autofac.Extras.DynamicProxy;
 using Business.Abstract;
 using Business.Authentication;
 using Business.Repositories.CategoryRepository;
+using Business.Repositories.ChatRepository;
 using Business.Repositories.EmailRepository;
 using Business.Repositories.EventRepository;
 using Business.Repositories.EventRequestRepository;
@@ -16,6 +17,7 @@ using DataAccess.Repositories.CategoryRepository;
 using DataAccess.Repositories.EmailRepository;
 using DataAccess.Repositories.EventRepository;
 using DataAccess.Repositories.EventRequestRepository;
+using DataAccess.Repositories.MessageChatRepository;
 using DataAccess.Repositories.OperationClaimRepository;
 using DataAccess.Repositories.RateRepository;
 using DataAccess.Repositories.UserOperationClaimRepository;
@@ -50,6 +52,9 @@ namespace Business.DependencyResolvers.Autofac
 
             builder.RegisterType<EventRequestManager>().As<IEventRequestService>();
             builder.RegisterType<EfEventRequestDal>().As<IEventRequestDal>();
+
+            builder.RegisterType<ChatManager>().As<IChatService>();
+            builder.RegisterType<EfMessageChatDal>().As<IEfMessageChatDal>();
 
             builder.RegisterType<AuthManager>().As<IAuthService>();
 
