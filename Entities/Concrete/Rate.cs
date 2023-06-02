@@ -12,5 +12,6 @@ namespace Entities.Concrete
         public string Phone { get; set; }
         public decimal RateTotal { get; set; }
         public int VoterCount { get; set; }
+      
     }
 }

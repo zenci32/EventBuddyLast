@@ -25,16 +25,31 @@ namespace Business.Repositories.RateRepository
         {
             try
             {
-
-                var newRate = new Rate
+                var getRate = GetByPhoneNumber(phoneNumber).Result;
+                if (getRate != null)
                 {
-                    Phone = phoneNumber,
-                    RateTotal = rateTotal,
-                };
+                    var rate = getRate.RateTotal * getRate.VoterCount;
+                    rate = (rate + rateTotal) / (getRate.VoterCount + 1);
+                    getRate.RateTotal = rate;
+                    getRate.VoterCount += 1;
+                    await _rateDal.Update(getRate);
+                    return new SuccessResult("Rate başarıyla güncellend.");
 
-                await _rateDal.Add(newRate);
+                }
+                else
+                {
 
-                return new SuccessResult("Rate başarıyla eklendi.");
+                    var newRate = new Rate
+                    {
+                        Phone = phoneNumber,
+                        RateTotal = rateTotal,
+                        VoterCount = 1,
+                    };
+                    await _rateDal.Add(newRate);
+                    return new SuccessResult("Rate başarıyla eklendi.");
+                }
+
+                
             }
             catch (Exception ex)
             {
